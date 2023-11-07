@@ -9,10 +9,9 @@ def index(request):
     return HttpResponse("Olá mundo! Este é o app notes de Tecnologias Web do Insper.")
 
 @api_view(['GET', 'POST'])
-def api_note(request, note_id):
-    try:
-        filme = Filme.objects.get(id=note_id)
-    except Filme.DoesNotExist:
-        raise Http404()
-    serialized_note = FilmeSerializer(filme)
-    return Response(serialized_note.data)
+def cadastro(request, note_id):
+    if request.method == 'POST':
+        login = request.data.get('login')
+        senha = request.data.get('senha')
+        print('login', login)
+        print('senha', senha)
