@@ -66,3 +66,33 @@ def favoritos(request, nome):
         return JsonResponse({'message' : 'Não há usuario'})
         
         
+@api_view(['POST'])
+def adicionaFavorito(request):
+    if request.method == 'POST':
+        info = request.data
+        nome = info['login']
+        titulo = info['titulo']
+        generos = info['generos']
+        streamings = info['streamings']  # Corrigi o nome do campo
+        links = info['links']
+
+        # Verificar se o usuário existe
+        try:
+            usuario = Usuario.objects.get(login=nome)
+        except Usuario.DoesNotExist:
+            return JsonResponse({'message': 'Usuário não encontrado'})
+
+        # Verificar se o filme já está nos favoritos do usuário
+        if usuario.favoritos.filter(title=titulo).exists():
+            return JsonResponse({'message': 'Filme já está nos favoritos'})
+
+        # Criar e salvar o novo filme
+        novo_filme = Filme(title=titulo, generos=generos, streamings=streamings, links=links)
+        novo_filme.save()
+
+        # Adicionar o novo filme aos favoritos do usuário
+        usuario.favoritos.add(novo_filme)
+
+        return JsonResponse({'message': 'Filme adicionado aos favoritos'})
+
+    return JsonResponse({'message': 'Requisição inválida'})
