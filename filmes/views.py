@@ -36,16 +36,33 @@ def cadastro(request):
 @api_view(['POST'])
 def login(request):
     if request.method == 'POST':
-        print(request)
-        novo_usuario = request.data
+        print('request', request.data)
+        usuario = request.data
+        nome = usuario['login']
+        senha = usuario['senha']
 
-       #teste
         try:
-            us = Usuario.objects.get(login=novo_usuario['login'])
+            us = Usuario.objects.get(login=nome)
+            print('us', us.favoritos)
+            if nome == us.login and senha == us.senha:
+                print('dados do usuario batem')
+                return JsonResponse({'message' : 'Login efetuado'})
+            else:
+                return JsonResponse({'message' : 'Senha está incorreta'})
         except Usuario.DoesNotExist:
-            raise Http404()
-        print(us)
-        #fim do teste
+            return JsonResponse({'message' : 'Usuário não existente'})
         
+@api_view(['GET'])
+def favoritos(request, nome):
+    print('nome', nome)
+    try:
+        us = Usuario.objects.get(login=nome)
+        filmes_favoritos = us.favoritos.all()
+        titulos_favoritos = [filme.generos for filme in filmes_favoritos]
 
-    return JsonResponse({'message': 'Data received successfully'})
+        print('Filmes favoritos do usuário:', titulos_favoritos)
+        return JsonResponse({'message' : 'Aqui estão os filmes favoritos'})
+    except Usuario.DoesNotExist:
+        return JsonResponse({'message' : 'Não há usuario'})
+        
+        
