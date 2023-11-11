@@ -58,12 +58,24 @@ def favoritos(request, nome):
     try:
         us = Usuario.objects.get(login=nome)
         filmes_favoritos = us.favoritos.all()
-        titulos_favoritos = [filme.generos for filme in filmes_favoritos]
+        
+        titulos_favoritos = [filme.title for filme in filmes_favoritos]
+        generos_favoritos = [filme.generos for filme in filmes_favoritos]
+        streamings_favoritos = [filme.streamings for filme in filmes_favoritos]
+        links_favoritos = [filme.links for filme in filmes_favoritos]
 
-        print('Filmes favoritos do usuário:', titulos_favoritos)
-        return JsonResponse({'message' : 'Aqui estão os filmes favoritos'})
+        infos_favoritos = {
+            'titulos': titulos_favoritos,
+            'generos': generos_favoritos,
+            'streamings': streamings_favoritos,
+            'links': links_favoritos,
+        }
+
+        print('Filmes favoritos do usuário:', infos_favoritos)
+        return JsonResponse({'filmes_favoritos': infos_favoritos})
     except Usuario.DoesNotExist:
-        return JsonResponse({'message' : 'Não há usuario'})
+        return JsonResponse({'message': 'Não há usuário'})
+
         
         
 @api_view(['POST'])
