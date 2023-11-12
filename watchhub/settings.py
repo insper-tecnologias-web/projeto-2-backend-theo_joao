@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'watchhub.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://watchhubuser:AmQ3pgJ0EICDzCBjDwKWuVS2vw82Hj6E@dpg-cl8druqvokcc73auiv80-a.oregon-postgres.render.com/watchhub',
+        default='postgres://postgres:2Fb43145e6D-g5*AFEcBeff332fGFbC4@monorail.proxy.rlwy.net:45129/railway',
         conn_max_age=600,
         ssl_require=not DEBUG
     )
