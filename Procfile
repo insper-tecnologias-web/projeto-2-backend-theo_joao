@@ -1,2 +1,2 @@
 release: python manage.py migrate && python manage.py collectstatic
-web: gunicorn getit.wsgi
+web: gunicorn filmes.wsgi
